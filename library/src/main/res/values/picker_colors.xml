@@ -37,6 +37,7 @@
     <color name="picker_picture_item_folder_background">#1f1f1f</color>
     <color name="picker_picture_item_selection_selected">@color/picker_main_color</color>
     <color name="picker_picture_item_selection" >#88000000</color>
+    <color name="picker_picture_item_selected">#fff</color>
 
     <!-- Map -->
     <color name="picker_map_nearby_header_color">@color/picker_main_color</color>

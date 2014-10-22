@@ -30,9 +30,12 @@
                 android:background="@drawable/picker_picture_item_stroke"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-            <ImageView
+            <TextView
+                android:gravity="center"
+                android:textColor="@color/picker_picture_item_selected"
+                android:text="0"
+                android:textStyle="bold"
                 android:id="@+id/selected"
-                android:src="@drawable/picker_viewer_check"
                 android:background="@drawable/picker_picture_selected"
                 android:layout_alignParentRight="true"
                 android:layout_width="23dp"

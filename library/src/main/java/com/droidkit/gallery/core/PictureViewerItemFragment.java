@@ -92,8 +92,10 @@ public class PictureViewerItemFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        if(mAttacher!=null)
+        if(mAttacher!=null) {
             mAttacher.cleanup();
+
+        }
     }
 
     @Override

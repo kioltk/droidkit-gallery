@@ -10,8 +10,8 @@ import com.droidkit.gallery.R;
 public class PictureHolder extends ExploreItemViewHolder {
     private final View videoView;
 
-    public PictureHolder(View itemView) {
-        super(itemView);
+    public PictureHolder(View itemView, int itemSize) {
+        super(itemView, itemSize);
         videoView = itemView.findViewById(R.id.video_holder);
     }
 

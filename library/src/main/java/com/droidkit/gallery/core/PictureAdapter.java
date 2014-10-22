@@ -15,6 +15,7 @@ import com.droidkit.gallery.items.ExplorerItem;
 import com.droidkit.gallery.items.PictureFolderHolder;
 import com.droidkit.gallery.items.PictureFolderItem;
 import com.droidkit.gallery.items.PictureHolder;
+import com.droidkit.gallery.util.Timer;
 
 import java.util.ArrayList;
 
@@ -28,6 +29,7 @@ public class PictureAdapter extends BaseAdapter {
     private final int itemSize;
     private final int spacing;
     private final int columnsNum;
+    private SelectionListener selectionListener;
     private int itemWidth;
 
     public PictureAdapter(SuperPickerActivity activity, ArrayList<ExplorerItem> items, int columnsNum) {
@@ -39,8 +41,11 @@ public class PictureAdapter extends BaseAdapter {
 
 
         // PWNED!
-        this.itemSize = (int) ((metrics.widthPixels  / columnsNum) ) - spacing;
-        //itemSize = itemSize - spacing;
+        this.itemSize = (int) ((metrics.widthPixels / columnsNum)) - spacing;
+    }
+    public PictureAdapter(SuperPickerActivity activity, ArrayList<ExplorerItem> items, int columnsNum, SelectionListener selectionListener) {
+        this(activity,items,columnsNum);
+        this.selectionListener = selectionListener;
     }
 
     @Override
@@ -65,55 +70,40 @@ public class PictureAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
+        Timer.start();
         final ExplorerItem item = getItem(position);
         final View itemView;
 
 
         ExploreItemViewHolder holder;
-        if (item instanceof PictureFolderItem) {
-            if (convertView != null && convertView.getTag() instanceof PictureFolderHolder)
-                itemView = convertView;
-            else
-                itemView = View.inflate(pickerActivity, R.layout.picker_item_picture_folder, null);
-            holder = new PictureFolderHolder(itemView);
-
+        if (convertView != null) {
+            itemView = convertView;
+            holder = (ExploreItemViewHolder) itemView.getTag();
         } else {
-            if (convertView != null && convertView.getTag() instanceof PictureHolder)
-                itemView = convertView;
-            else
+            if (item instanceof PictureFolderItem) {
+                itemView = View.inflate(pickerActivity, R.layout.picker_item_picture_folder, null);
+                holder = new PictureFolderHolder(itemView, itemSize);
+            } else {
                 itemView = View.inflate(pickerActivity, R.layout.picker_item_picture, null);
-
-            holder = (new PictureHolder(itemView));
+                holder = (new PictureHolder(itemView, itemSize));
+            }
         }
 
         itemView.setTag(holder);
         ViewGroup.LayoutParams params = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, itemSize);
-        // params.width = itemWidth;
-        // params.height = itemWidth;
         itemView.setLayoutParams(params);
 
-        TextView titleView = (TextView) itemView.findViewById(R.id.title);
-        TextView subTitleView = (TextView) itemView.findViewById(R.id.subtitle);
-        View selectedView = itemView.findViewById(R.id.selected);
-
-
-        titleView.setText(item.getTitle());
-        subTitleView.setText(item.getSubtitle(null));
-
-
         item.bindData(holder);
+        holder.setSelected(pickerActivity.getSelectedIndex(item));
+        holder.setSelectListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(selectionListener!=null)
+                    selectionListener.selectItem(item, itemView);
+            }
+        });
 
-        if (selectedView != null) {
-            selectedView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    pickerActivity.selectItem(item, itemView);
-                }
-            });
-        }
-
-
+        Timer.stop("Item created");
         return itemView;
     }
 }

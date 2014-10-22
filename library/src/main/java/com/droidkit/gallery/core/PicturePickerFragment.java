@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.droidkit.gallery.GalleryActivity;
 import com.droidkit.gallery.R;
+import com.droidkit.gallery.items.ExploreItemViewHolder;
 import com.droidkit.gallery.items.ExplorerItem;
 import com.droidkit.gallery.items.PictureFolderItem;
 import com.droidkit.gallery.items.PictureItem;
@@ -28,13 +29,14 @@ import java.util.ArrayList;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class PicturePickerFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class PicturePickerFragment extends Fragment implements AdapterView.OnItemClickListener, SelectionListener {
 
     protected View rootView;
     protected String path;
     protected ArrayList<ExplorerItem> items;
     protected GalleryActivity pickerActivity;
     protected String pathName = "Select pictures";
+    private GridView gridView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,7 +94,7 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
 
             }else {
                 int columnsNum = getResources().getInteger(R.integer.num_columns_albums);
-                GridView gridView = (GridView) rootView.findViewById(R.id.grid);
+                gridView = (GridView) rootView.findViewById(R.id.grid);
                 gridView.setNumColumns(columnsNum);
                 gridView.setAdapter(new PictureAdapter(pickerActivity, items, columnsNum));
                 gridView.setOnItemClickListener(pickerActivity);
@@ -106,10 +108,10 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
             if (items.isEmpty()) {
                 ((TextView)rootView.findViewById(R.id.status)).setText(R.string.picker_pictures_empty_folder);
             } else {
-                GridView gridView = (GridView) rootView.findViewById(R.id.grid);
+                gridView = (GridView) rootView.findViewById(R.id.grid);
                 int columnsNum = getResources().getInteger(R.integer.num_columns_pictures);
                 gridView.setNumColumns(columnsNum);
-                gridView.setAdapter(new PictureAdapter(pickerActivity, items, columnsNum));
+                gridView.setAdapter(new PictureAdapter(pickerActivity, items, columnsNum, this));
                 gridView.setOnItemClickListener(this);
             }
         }
@@ -162,4 +164,23 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
         else
             pickerActivity.openFull(path, item.getFile())
 ;    }
+
+    @Override
+    public void selectItem(ExplorerItem item, View itemView) {
+        pickerActivity.selectItem(item, itemView);
+        int firstVisible =  gridView.getFirstVisiblePosition();
+        int lastVisible = gridView.getLastVisiblePosition();
+        for (int i = 0; i < items.size(); i++) {
+            ExplorerItem tempItem = items.get(i);
+            String tempPath = tempItem.getPath();
+            if(pickerActivity.isSelected(tempPath)){
+                if(i>=firstVisible && i <= lastVisible) {
+                    ExploreItemViewHolder holder = (ExploreItemViewHolder) gridView.getChildAt(i - firstVisible).getTag();
+                    holder.setSelected(pickerActivity.getSelectedIndex(tempItem));
+                }
+
+            }
+        }
+
+    }
 }

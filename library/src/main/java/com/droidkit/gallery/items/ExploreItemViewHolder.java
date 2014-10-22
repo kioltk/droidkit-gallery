@@ -3,6 +3,7 @@ package com.droidkit.gallery.items;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
+import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,10 +27,14 @@ public class ExploreItemViewHolder {
     private final View selectedView;
     private final View divider;
     private final TextView typeView;
+    private final View itemView;
     private Context context;
+    private final int itemSize;
 
-    public ExploreItemViewHolder(View itemView) {
+    public ExploreItemViewHolder(View itemView, int itemSize) {
+        this.itemSize = (int) (itemSize);
         context = itemView.getContext();
+        this.itemView = itemView;
         titleView = (TextView) itemView.findViewById(R.id.title);
         subTitleView = (TextView) itemView.findViewById(R.id.subtitle);
         imageView = (ImageView) itemView.findViewById(R.id.image);
@@ -53,7 +58,12 @@ public class ExploreItemViewHolder {
     }
 
     public void setSelected(boolean selected) {
-        // selectedView.setSelected(selected);
+        if(selectedView!=null) {
+            selectedView.setSelected(selected);
+            if (selectedView instanceof Checkable) {
+                ((Checkable) selectedView).setChecked(selected);
+            }
+        }
     }
 
     public void disableSubtitle() {
@@ -73,12 +83,13 @@ public class ExploreItemViewHolder {
     }
 
     public void setImage(String uri){
+        imageView.setImageResource(R.drawable.loading);
         DisplayImageOptions options = new DisplayImageOptions.Builder()
                         .cacheInMemory(false)
                         .cacheOnDisk(false)
                         .build();
 
-        ImageLoader.getInstance().loadImage(uri, new ImageSize(imageView.getWidth(), imageView.getHeight()), options, new ImageLoadingListener() {
+        /*ImageLoader.getInstance().loadImage(uri, new ImageSize(itemSize, itemSize), options, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
 
@@ -98,10 +109,25 @@ public class ExploreItemViewHolder {
             public void onLoadingCancelled(String imageUri, View view) {
 
             }
-        });
+        });*/
     }
 
     public void setType(String fileType) {
         typeView.setText(fileType);
+    }
+
+    public void setSelectListener(View.OnClickListener onClickListener) {
+
+        if (selectedView != null) {
+            selectedView.setOnClickListener(onClickListener);
+        }
+    }
+
+    public void setSelected(int selectedIndex) {
+        selectedIndex++;
+        if(selectedView!=null) {
+            ((TextView) selectedView).setText("" + (selectedIndex > 0 ? selectedIndex : ""));
+            selectedView.setSelected(selectedIndex > 0);
+        }
     }
 }

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.droidkit.gallery.items.ExploreItemViewHolder;
 import com.droidkit.gallery.items.ExplorerItem;
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
@@ -38,7 +39,8 @@ public abstract class SuperPickerActivity extends Activity implements AdapterVie
         setContentView(R.layout.picker_activity_picker);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.animator.picker_fragment_explorer_welcome_enter, R.animator.picker_fragment_explorer_welcome_exit)
+                    .setCustomAnimations(R.animator.picker_fragment_explorer_welcome_enter,
+                            R.animator.picker_fragment_explorer_welcome_exit)
                     .add(R.id.container, getWelcomeFragment())
                     .commit();
         }
@@ -149,7 +151,10 @@ public abstract class SuperPickerActivity extends Activity implements AdapterVie
     }
     public void selectItem(ExplorerItem item, View itemView){
         item.setSelected(selectItem(item.getPath()));
-        item.bindData(itemView);
+        //item.bindData(itemView);
+        ExploreItemViewHolder holder = (ExploreItemViewHolder) itemView.getTag();
+        holder.setSelected(getSelectedIndex(item));
+
     }
 
     public void updateCounter() {
@@ -206,5 +211,10 @@ public abstract class SuperPickerActivity extends Activity implements AdapterVie
 
     public void setFragment(Fragment fragment) {
         this.currentFragment = fragment;
+    }
+
+    public int getSelectedIndex(ExplorerItem item) {
+        return selectedItems.indexOf(item.getPath());
+
     }
 }
