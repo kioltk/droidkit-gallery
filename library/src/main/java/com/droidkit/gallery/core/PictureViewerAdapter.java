@@ -35,11 +35,7 @@ public class PictureViewerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
-        Fragment fragment = new PictureViewerItemFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("path", items.get(i).getPath());
-        fragment.setArguments(bundle);
-        return fragment;
+        return PictureViewerItemFragment.getInstance(items.get(i).getPath());
     }
 
 }

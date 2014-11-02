@@ -34,7 +34,7 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
     protected View rootView;
     protected String path;
     protected ArrayList<ExplorerItem> items;
-    protected GalleryActivity pickerActivity;
+    protected GalleryActivity activity;
     protected String pathName = "Select pictures";
     private GridView gridView;
 
@@ -96,8 +96,8 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
                 int columnsNum = getResources().getInteger(R.integer.num_columns_albums);
                 gridView = (GridView) rootView.findViewById(R.id.grid);
                 gridView.setNumColumns(columnsNum);
-                gridView.setAdapter(new PictureAdapter(pickerActivity, items, columnsNum));
-                gridView.setOnItemClickListener(pickerActivity);
+                gridView.setAdapter(new PictureAdapter(activity, items, columnsNum));
+                gridView.setOnItemClickListener(activity);
             }
         } else {
 
@@ -111,12 +111,12 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
                 gridView = (GridView) rootView.findViewById(R.id.grid);
                 int columnsNum = getResources().getInteger(R.integer.num_columns_pictures);
                 gridView.setNumColumns(columnsNum);
-                gridView.setAdapter(new PictureAdapter(pickerActivity, items, columnsNum, this));
+                gridView.setAdapter(new PictureAdapter(activity, items, columnsNum, this));
                 gridView.setOnItemClickListener(this);
             }
         }
-        pickerActivity.updateCounter();
-        pickerActivity.getActionBar().setTitle(pathName);
+        activity.updateCounter();
+        activity.getActionBar().setTitle(pathName);
         return rootView;
     }
 
@@ -135,7 +135,7 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
                 do {
                     String imageUri = imageCursor.getString(imgUriColumnIndex);
 
-                    items.add(new PictureItem(new File(imageUri), pickerActivity.isSelected(imageUri)));
+                    items.add(new PictureItem(new File(imageUri), activity.isSelected(imageUri)));
 
                 } while (imageCursor.moveToNext());
             imageCursor.close();
@@ -153,30 +153,30 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pickerActivity = (GalleryActivity) activity;
+        this.activity = (GalleryActivity) activity;
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View itemView, int position, long id) {
         ExplorerItem item = (ExplorerItem) parent.getItemAtPosition(position);
         if(item.isDirectory())
-            pickerActivity.onItemClick(parent, itemView, position, id);
+            activity.onItemClick(parent, itemView, position, id);
         else
-            pickerActivity.openFull(path, item.getFile())
+            activity.openFull(path, item.getFile())
 ;    }
 
     @Override
     public void selectItem(ExplorerItem item, View itemView) {
-        pickerActivity.selectItem(item, itemView);
+        activity.selectItem(item, itemView);
         int firstVisible =  gridView.getFirstVisiblePosition();
         int lastVisible = gridView.getLastVisiblePosition();
         for (int i = 0; i < items.size(); i++) {
             ExplorerItem tempItem = items.get(i);
             String tempPath = tempItem.getPath();
-            if(pickerActivity.isSelected(tempPath)){
+            if(activity.isSelected(tempPath)){
                 if(i>=firstVisible && i <= lastVisible) {
                     ExploreItemViewHolder holder = (ExploreItemViewHolder) gridView.getChildAt(i - firstVisible).getTag();
-                    holder.setSelected(pickerActivity.getSelectedIndex(tempItem));
+                    holder.setSelected(activity.getSelectedIndex(tempItem));
                 }
 
             }

@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.droidkit.gallery.ImageViewerActivity;
+import com.droidkit.gallery.FullscreenActivity;
 import com.droidkit.gallery.GalleryActivity;
 
 
@@ -70,7 +70,7 @@ public class MyActivity extends Activity {
             rootView.findViewById(R.id.gallery_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(getActivity(), ImageViewerActivity.class));
+                    startActivity(new Intent(getActivity(), FullscreenActivity.class));
                 }
             });
             return rootView;

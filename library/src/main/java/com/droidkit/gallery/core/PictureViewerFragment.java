@@ -23,6 +23,10 @@ public class PictureViewerFragment extends PicturePickerFragment {
     private ViewPager pager;
     private PictureViewerAdapter adapter;
 
+
+    // system ui
+
+
     // todo more interactive
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,7 +59,7 @@ public class PictureViewerFragment extends PicturePickerFragment {
         path = bundle.getString("path");
         String selectedItem = bundle.getString("selectedItem");
         loadDirectory();
-        adapter = new PictureViewerAdapter(pickerActivity, items);
+        adapter = new PictureViewerAdapter(activity, items);
         pager.setAdapter(adapter);
 
         for (int i = 0; i < items.size(); i++) {
@@ -69,8 +73,29 @@ public class PictureViewerFragment extends PicturePickerFragment {
 
 
 
+
+
         return rootView;
 
+    }
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // activity.showSystemUi();
     }
 
     @Override
@@ -81,6 +106,6 @@ public class PictureViewerFragment extends PicturePickerFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pickerActivity = (GalleryActivity) activity;
+        this.activity = (GalleryActivity) activity;
     }
 }
