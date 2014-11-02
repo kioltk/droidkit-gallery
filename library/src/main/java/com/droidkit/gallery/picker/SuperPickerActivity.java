@@ -40,8 +40,8 @@ public abstract class SuperPickerActivity extends Activity implements AdapterVie
         setContentView(R.layout.picker_activity_picker);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.animator.picker_fragment_explorer_welcome_enter,
-                            R.animator.picker_fragment_explorer_welcome_exit)
+                    .setCustomAnimations(R.animator.picker_fragment_explorer_enter, R.animator.picker_fragment_explorer_out,
+                            R.animator.picker_fragment_explorer_return, R.animator.picker_fragment_explorer_exit)
                     .add(R.id.container, getWelcomeFragment())
                     .commit();
         }

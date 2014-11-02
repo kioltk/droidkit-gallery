@@ -13,8 +13,6 @@ import android.widget.AdapterView;
 
 import com.droidkit.gallery.R;
 import com.droidkit.gallery.items.ExplorerItem;
-import com.droidkit.gallery.core.PicturePickerFragment;
-import com.droidkit.gallery.core.PictureViewerFragment;
 import com.droidkit.gallery.util.SystemUiHider;
 
 import java.io.File;
@@ -73,7 +71,7 @@ public class GalleryPickerActivity extends SuperPickerActivity {
                             }
                         });
                         if(!showing && visible){
-                            delayedHide(3000);
+                            //delayedHide(3000);
                         }
                     }
                 });
@@ -127,8 +125,8 @@ public class GalleryPickerActivity extends SuperPickerActivity {
             fragment.setArguments(bundle);
             getFragmentManager().beginTransaction()
                     // todo animate out
-                    //.setCustomAnimations(R.animator.picker_fragment_explorer_enter, R.animator.picker_fragment_explorer_exit,
-                      //      R.animator.picker_fragment_explorer_return, R.animator.picker_fragment_explorer_out)
+                    .setCustomAnimations(R.animator.picker_fragment_explorer_enter, R.animator.picker_fragment_explorer_out,
+                            R.animator.picker_fragment_explorer_return, R.animator.picker_fragment_explorer_exit)
                     .replace(R.id.container, fragment)
                     .addToBackStack(path)
                     .commit();
@@ -142,9 +140,8 @@ public class GalleryPickerActivity extends SuperPickerActivity {
             Fragment fragment = new PictureViewerFragment();
             fragment.setArguments(bundle);
             getFragmentManager().beginTransaction()
-                    // todo animate out
-                    // .setCustomAnimations(R.animator.picker_fragment_explorer_enter, R.animator.picker_fragment_explorer_exit,
-                    //        R.animator.picker_fragment_explorer_return, R.animator.picker_fragment_explorer_out)
+                    .setCustomAnimations(R.animator.picker_fragment_explorer_enter, R.animator.picker_fragment_explorer_out,
+                            R.animator.picker_fragment_explorer_return, R.animator.picker_fragment_explorer_exit)
                     .replace(R.id.container, fragment)
                     .addToBackStack(path)
                     .commit();
@@ -164,8 +161,8 @@ public class GalleryPickerActivity extends SuperPickerActivity {
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction()
                 // todo animate out
-                .setCustomAnimations(R.animator.picker_fragment_explorer_enter, R.animator.picker_fragment_explorer_exit,
-                    R.animator.picker_fragment_explorer_return, R.animator.picker_fragment_explorer_out)
+                .setCustomAnimations(R.animator.picker_fragment_explorer_enter, R.animator.picker_fragment_explorer_out,
+                    R.animator.picker_fragment_explorer_return, R.animator.picker_fragment_explorer_exit)
                 .replace(R.id.container, fragment)
                 .addToBackStack(path+"_full")
                 .commit();

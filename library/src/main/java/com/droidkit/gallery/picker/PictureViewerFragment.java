@@ -81,6 +81,11 @@ public class PictureViewerFragment extends PicturePickerFragment {
     }
 
     @Override
+    public Animator onCreateAnimator(int transit, boolean enter, int nextAnim) {
+        return null;
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Badapuf
     }
