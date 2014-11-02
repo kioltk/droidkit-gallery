@@ -42,16 +42,10 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
     public void loadDirectories() {
 
         long startTime = System.currentTimeMillis();
-        final String[] columns =
-                {
-                        MediaStore.Images.Media.DATA,
-                        MediaStore.Images.Media.BUCKET_ID,
-                        MediaStore.Images.Media.BUCKET_DISPLAY_NAME
-                };
+        final String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media.BUCKET_ID, MediaStore.Images.Media.BUCKET_DISPLAY_NAME};
         final String orderBy = MediaStore.Images.Media.DEFAULT_SORT_ORDER;
 
         Cursor imagecursor = getActivity().getContentResolver().query(
@@ -94,11 +88,11 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
         if (bundle == null) {
             rootView = inflater.inflate(R.layout.picker_fragment_picture_picker, container, false);
             loadDirectories();
-            if (items.isEmpty()) {
+            if(items.isEmpty()){
 
-                ((TextView) rootView.findViewById(R.id.status)).setText(R.string.picker_pictures_empty);
+                ((TextView)rootView.findViewById(R.id.status)).setText(R.string.picker_pictures_empty);
 
-            } else {
+            }else {
                 int columnsNum = getResources().getInteger(R.integer.num_columns_albums);
                 gridView = (GridView) rootView.findViewById(R.id.grid);
                 gridView.setNumColumns(columnsNum);
@@ -107,12 +101,12 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
             }
         } else {
 
-            pathID = bundle.getString(ARG_PATH_ID);
+            path = bundle.getString("path");
             pathName = bundle.getString("path_name");
             loadDirectory();
             rootView = inflater.inflate(R.layout.picker_fragment_picture_picker, container, false);
             if (items.isEmpty()) {
-                ((TextView) rootView.findViewById(R.id.status)).setText(R.string.picker_pictures_empty_folder);
+                ((TextView)rootView.findViewById(R.id.status)).setText(R.string.picker_pictures_empty_folder);
             } else {
                 gridView = (GridView) rootView.findViewById(R.id.grid);
                 int columnsNum = getResources().getInteger(R.integer.num_columns_pictures);
@@ -146,7 +140,7 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
                 } while (imageCursor.moveToNext());
             imageCursor.close();
         }
-        Log.w("Pictures loader", "Loaded " + items.size() + " items in directory in " + (System.currentTimeMillis() - startTime));
+        Log.w("Pictures loader", "Loaded " + items.size()+ " items in directory in " + (System.currentTimeMillis() - startTime));
     }
 
     @Override
@@ -165,7 +159,7 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> parent, View itemView, int position, long id) {
         ExplorerItem item = (ExplorerItem) parent.getItemAtPosition(position);
-        if (item.isDirectory())
+        if(item.isDirectory())
             pickerActivity.onItemClick(parent, itemView, position, id);
         else
             pickerActivity.openFull(pathID, item.getFile())
@@ -175,13 +169,13 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
     @Override
     public void selectItem(ExplorerItem item, View itemView) {
         pickerActivity.selectItem(item, itemView);
-        int firstVisible = gridView.getFirstVisiblePosition();
+        int firstVisible =  gridView.getFirstVisiblePosition();
         int lastVisible = gridView.getLastVisiblePosition();
         for (int i = 0; i < items.size(); i++) {
             ExplorerItem tempItem = items.get(i);
             String tempPath = tempItem.getPath();
-            if (pickerActivity.isSelected(tempPath)) {
-                if (i >= firstVisible && i <= lastVisible) {
+            if(pickerActivity.isSelected(tempPath)){
+                if(i>=firstVisible && i <= lastVisible) {
                     ExploreItemViewHolder holder = (ExploreItemViewHolder) gridView.getChildAt(i - firstVisible).getTag();
                     holder.setSelected(pickerActivity.getSelectedIndex(tempItem));
                 }

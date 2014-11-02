@@ -68,25 +68,35 @@ public class SystemUiHiderHoneycomb extends SystemUiHiderBase {
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setup() {
         mAnchorView.setOnSystemUiVisibilityChangeListener(mSystemUiVisibilityChangeListener);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void hide() {
+        //super.hide();
         mAnchorView.setSystemUiVisibility(mHideFlags);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void show() {
+        //super.show();
         mAnchorView.setSystemUiVisibility(mShowFlags);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isVisible() {
         return mVisible;
@@ -98,14 +108,13 @@ public class SystemUiHiderHoneycomb extends SystemUiHiderBase {
         public void onSystemUiVisibilityChange(int vis) {
             // Test against mTestFlags to see if the system UI is visible.
             if ((vis & mTestFlags) != 0) {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
                     // Pre-Jelly Bean, we must manually hide the action bar
                     // and use the old window flags API.
                     mActivity.getActionBar().hide();
                     mActivity.getWindow().setFlags(
                             WindowManager.LayoutParams.FLAG_FULLSCREEN,
                             WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                }
+
 
                 // Trigger the registered listener and cache the visibility
                 // state.
@@ -114,14 +123,13 @@ public class SystemUiHiderHoneycomb extends SystemUiHiderBase {
 
             } else {
                 mAnchorView.setSystemUiVisibility(mShowFlags);
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
                     // Pre-Jelly Bean, we must manually show the action bar
                     // and use the old window flags API.
                     mActivity.getActionBar().show();
                     mActivity.getWindow().setFlags(
                             0,
                             WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                }
+
 
                 // Trigger the registered listener and cache the visibility
                 // state.

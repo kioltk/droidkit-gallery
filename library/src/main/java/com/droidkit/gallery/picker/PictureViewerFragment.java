@@ -80,7 +80,6 @@ public class PictureViewerFragment extends PicturePickerFragment {
 
     }
 
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Badapuf

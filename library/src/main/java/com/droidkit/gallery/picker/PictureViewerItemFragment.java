@@ -42,7 +42,7 @@ public class PictureViewerItemFragment extends Fragment {
 //        Bitmap bitmap = BitmapFactory.decodeFile(pathID);
         String uri = "file://" + path;
         DisplayImageOptions options = new DisplayImageOptions.Builder()
-                .cacheInMemory(false)
+                .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .build();
 
@@ -61,6 +61,12 @@ public class PictureViewerItemFragment extends Fragment {
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 holder.setImageBitmap(loadedImage);
                 mAttacher = new PhotoViewAttacher(holder);
+                holder.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        pickerActivity.toggleSystemUi();
+                    }
+                });
             }
 
             @Override
@@ -81,6 +87,15 @@ public class PictureViewerItemFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    public static PictureViewerItemFragment getInstance(String path){
+
+        PictureViewerItemFragment fragment = new PictureViewerItemFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("path", path);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override
