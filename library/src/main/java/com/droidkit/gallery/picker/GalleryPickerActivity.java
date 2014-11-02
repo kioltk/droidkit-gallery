@@ -1,4 +1,4 @@
-package com.droidkit.gallery;
+package com.droidkit.gallery.picker;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -8,13 +8,12 @@ import android.view.View;
 import android.widget.AdapterView;
 
 
+import com.droidkit.gallery.R;
 import com.droidkit.gallery.items.ExplorerItem;
-import com.droidkit.gallery.core.PicturePickerFragment;
-import com.droidkit.gallery.core.PictureViewerFragment;
 
 import java.io.File;
 
-public class GalleryActivity extends SuperPickerActivity {
+public class GalleryPickerActivity extends SuperPickerActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +62,7 @@ public class GalleryActivity extends SuperPickerActivity {
         if (item.isDirectory()) {
             String path = item.getPath();
             Bundle bundle = new Bundle();
-            bundle.putString("path", path);
+            bundle.putString("pathID", path);
             bundle.putString("path_name", item.getTitle());
 
             Fragment fragment = new PicturePickerFragment();
@@ -80,7 +79,7 @@ public class GalleryActivity extends SuperPickerActivity {
 
             String path = item.getPath();
             Bundle bundle = new Bundle();
-            bundle.putString("path", path);
+            bundle.putString("pathID", path);
 
             Fragment fragment = new PictureViewerFragment();
             fragment.setArguments(bundle);
@@ -101,18 +100,19 @@ public class GalleryActivity extends SuperPickerActivity {
 
 
         Bundle bundle = new Bundle();
-        bundle.putString("path", path);
+        bundle.putString("pathID", path);
         bundle.putString("selectedItem", file.getPath());
         Fragment fragment = new PictureViewerFragment();
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction()
                 // todo animate out
-                // .setCustomAnimations(R.animator.picker_fragment_explorer_enter, R.animator.picker_fragment_explorer_exit,
-                //        R.animator.picker_fragment_explorer_return, R.animator.picker_fragment_explorer_out)
+                .setCustomAnimations(R.animator.picker_fragment_explorer_enter, R.animator.picker_fragment_explorer_exit,
+                    R.animator.picker_fragment_explorer_return, R.animator.picker_fragment_explorer_out)
                 .replace(R.id.container, fragment)
                 .addToBackStack(path+"_full")
                 .commit();
         currentFragment = fragment;
         invalidateOptionsMenu();
+
     }
 }

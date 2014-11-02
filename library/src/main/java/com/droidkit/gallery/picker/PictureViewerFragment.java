@@ -1,17 +1,24 @@
-package com.droidkit.gallery.core;
+package com.droidkit.gallery.picker;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.AnimationSet;
+import android.view.animation.TranslateAnimation;
 
-import com.droidkit.gallery.GalleryActivity;
 import com.droidkit.gallery.R;
 import com.droidkit.gallery.items.ExplorerItem;
+import com.droidkit.gallery.util.MaterialInterpolator;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -52,7 +59,7 @@ public class PictureViewerFragment extends PicturePickerFragment {
         Bundle bundle = getArguments();
 
 
-        path = bundle.getString("path");
+        pathID = bundle.getString("pathID");
         String selectedItem = bundle.getString("selectedItem");
         loadDirectory();
         adapter = new PictureViewerAdapter(pickerActivity, items);
@@ -73,6 +80,7 @@ public class PictureViewerFragment extends PicturePickerFragment {
 
     }
 
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Badapuf
@@ -81,6 +89,6 @@ public class PictureViewerFragment extends PicturePickerFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pickerActivity = (GalleryActivity) activity;
+        this.pickerActivity = (GalleryPickerActivity) activity;
     }
 }

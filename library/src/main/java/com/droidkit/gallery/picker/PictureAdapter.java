@@ -1,15 +1,13 @@
-package com.droidkit.gallery.core;
+package com.droidkit.gallery.picker;
 
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 
 import com.droidkit.gallery.R;
-import com.droidkit.gallery.SuperPickerActivity;
 import com.droidkit.gallery.items.ExploreItemViewHolder;
 import com.droidkit.gallery.items.ExplorerItem;
 import com.droidkit.gallery.items.PictureFolderHolder;

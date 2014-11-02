@@ -6,14 +6,15 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <application
         android:allowBackup="true"
-        android:hardwareAccelerated="true" >
+        android:hardwareAccelerated="true"
+        android:label="droidkit-gallery">
         <activity
-            android:name=".GalleryActivity"
+            android:name=".picker.GalleryPickerActivity"
             android:label="@string/example_title_activity_test"
             android:theme="@style/PickerTheme.PicturePicker" >
         </activity>
         <activity
-            android:name=".ImageViewerActivity"
+            android:name=".viewer.GalleryViewerActivity"
             android:label="@string/title_activity_fullscreen" >
         </activity>
     </application>

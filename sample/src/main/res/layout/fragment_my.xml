@@ -8,13 +8,13 @@
     tools:context=".MyActivity$PlaceholderFragment">
 
         <Button
-            android:id="@+id/gallery_button"
-            android:text="galery"
+            android:id="@+id/viewer"
+            android:text="Viewer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
-            android:id="@+id/full_gallery_button"
-            android:text="picture pager"
+            android:id="@+id/picker"
+            android:text="Picker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

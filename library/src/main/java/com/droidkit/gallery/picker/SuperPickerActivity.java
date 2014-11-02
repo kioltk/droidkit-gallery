@@ -1,4 +1,4 @@
-package com.droidkit.gallery;
+package com.droidkit.gallery.picker;
 
 import android.animation.ValueAnimator;
 import android.app.Activity;
@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.droidkit.gallery.R;
 import com.droidkit.gallery.items.ExploreItemViewHolder;
 import com.droidkit.gallery.items.ExplorerItem;
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;

@@ -1,10 +1,8 @@
-package com.droidkit.gallery.core;
+package com.droidkit.gallery.picker;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -12,22 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.droidkit.gallery.GalleryActivity;
 import com.droidkit.gallery.R;
 import com.droidkit.gallery.photoview.PhotoViewAttacher;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-
-import java.io.File;
 
 /**
  * Created by kiolt_000 on 24/09/2014.
  */
 public class PictureViewerItemFragment extends Fragment {
-    private GalleryActivity pickerActivity;
+    private GalleryPickerActivity pickerActivity;
     private View rootView;
     private String path;
     private PhotoViewAttacher mAttacher;
@@ -38,14 +32,14 @@ public class PictureViewerItemFragment extends Fragment {
 
         rootView = inflater.inflate(R.layout.picker_fragment_picture_viewer_item, null);
 
-        path = getArguments().getString("path");
+        path = getArguments().getString("pathID");
 
         final ImageView holder = (ImageView) rootView.findViewById(R.id.image);
 
         // Set the Drawable displayed
-        // "file://"+path
+        // "file://"+pathID
         // todo actor image loading?
-//        Bitmap bitmap = BitmapFactory.decodeFile(path);
+//        Bitmap bitmap = BitmapFactory.decodeFile(pathID);
         String uri = "file://" + path;
         DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .cacheInMemory(false)
@@ -101,6 +95,6 @@ public class PictureViewerItemFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.pickerActivity = (GalleryActivity) activity;
+        this.pickerActivity = (GalleryPickerActivity) activity;
     }
 }

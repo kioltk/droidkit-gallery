@@ -1,4 +1,4 @@
-package com.droidkit.gallery.core;
+package com.droidkit.gallery.picker;
 
 import android.view.View;
 

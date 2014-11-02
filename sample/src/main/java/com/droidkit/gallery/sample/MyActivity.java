@@ -2,7 +2,6 @@ package com.droidkit.gallery.sample;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,8 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.droidkit.gallery.ImageViewerActivity;
-import com.droidkit.gallery.GalleryActivity;
+import com.droidkit.gallery.Intents;
 
 
 public class MyActivity extends Activity {
@@ -47,9 +45,6 @@ public class MyActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
     public static class PlaceholderFragment extends Fragment {
 
         public PlaceholderFragment() {
@@ -60,17 +55,17 @@ public class MyActivity extends Activity {
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_my, container, false);
 
-            rootView.findViewById(R.id.full_gallery_button).setOnClickListener(new View.OnClickListener() {
+            rootView.findViewById(R.id.picker).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(getActivity(), GalleryActivity.class));
+                    startActivity(Intents.getPickerActivity(getActivity()));
                 }
             });
 
-            rootView.findViewById(R.id.gallery_button).setOnClickListener(new View.OnClickListener() {
+            rootView.findViewById(R.id.viewer).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(getActivity(), ImageViewerActivity.class));
+                    startActivity(Intents.getViewerActivity(getActivity(), "699601103"));
                 }
             });
             return rootView;

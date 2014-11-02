@@ -1,10 +1,9 @@
-package com.droidkit.gallery.core;
+package com.droidkit.gallery.picker;
 
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v13.app.FragmentStatePagerAdapter;
 
-import com.droidkit.gallery.SuperPickerActivity;
 import com.droidkit.gallery.items.ExplorerItem;
 
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class PictureViewerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int i) {
         Fragment fragment = new PictureViewerItemFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("path", items.get(i).getPath());
+        bundle.putString("pathID", items.get(i).getPath());
         fragment.setArguments(bundle);
         return fragment;
     }
