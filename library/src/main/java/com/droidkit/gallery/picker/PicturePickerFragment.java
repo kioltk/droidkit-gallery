@@ -1,5 +1,8 @@
 package com.droidkit.gallery.picker;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.app.Fragment;
 import android.database.Cursor;
@@ -155,6 +158,187 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
         Log.w("Pictures loader", "Loaded " + items.size() + " items in directory in " + (System.currentTimeMillis() - startTime));
     }
 
+
+    @Override
+    public Animator onCreateAnimator(int transit, boolean enter, int nextAnim) {
+        long animationLength = 0;
+        int animatorId = nextAnim;
+
+        if(gridView!=null)
+
+        if (nextAnim == R.animator.picker_fragment_explorer_enter) {
+            animatorId = R.animator.picker_activity_explorer_enter;
+            gridView.setAlpha(0);
+            gridView.post(new Runnable() {
+                @Override
+                public void run() {
+                    gridView.setAlpha(1);
+                    int offsetIncreaseOffset = 0;
+                    for (int i = 0; i < gridView.getChildCount(); i++) {
+                        View galleryItemView = gridView.getChildAt(i);
+                        //if (items.get(i) instanceof HeaderItem)
+                        {
+                            // todo animate headers
+                            /*
+                                offsetIncreaseOffset += 150;
+                                slideInAnimation.setStartOffset(i * 50 + offsetIncreaseOffset);
+                                offsetIncreaseOffset += 200;
+                            } else
+                            */
+                        }
+                        //else
+                        {
+
+                            AnimationSet dropDownAnimation = new AnimationSet(true);
+                            dropDownAnimation.setInterpolator(new MaterialInterpolator());
+                            dropDownAnimation.setDuration(180);
+
+                            if (i > 0 && i % columnsNum == 0) {
+                                offsetIncreaseOffset -= 125;
+                            }
+
+                            dropDownAnimation.setStartOffset(i * 50 + offsetIncreaseOffset);
+                            AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
+                            dropDownAnimation.addAnimation(alphaAnimation);
+                            ScaleAnimation scaleAnimation = new ScaleAnimation(
+                                    0f, 1f,
+                                    0f, 1f,
+                                    Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                            dropDownAnimation.addAnimation(scaleAnimation);
+                            galleryItemView.startAnimation(dropDownAnimation);
+                        }
+                    }
+                }
+            });
+            animationLength = gridView.getChildCount() * 100 + 50;
+            Log.d("Explorer animation", "CreateAnimator: enter");
+        } else if (nextAnim == R.animator.picker_fragment_explorer_exit) {
+            animatorId = R.animator.picker_activity_explorer_enter;
+
+            /*gridView.setAlpha(0);
+            gridView.post(new Runnable() {
+                @Override
+                public void run() {
+                    gridView.setAlpha(1);
+            */        int offsetIncreaseOffset = 0;
+            for (int i = 0; i < gridView.getChildCount(); i++) {
+                final View galleryItemView = gridView.getChildAt(i);
+                //if (items.get(i) instanceof HeaderItem)
+                {
+                    // todo animate headers
+                            /*
+                                offsetIncreaseOffset += 150;
+                                slideInAnimation.setStartOffset(i * 50 + offsetIncreaseOffset);
+                                offsetIncreaseOffset += 200;
+                            } else
+                            */
+                }
+                //else
+                {
+
+                    AnimationSet dropDownAnimation = new AnimationSet(true);
+                    dropDownAnimation.setInterpolator(new MaterialInterpolator());
+                    dropDownAnimation.setDuration(180);
+
+                    if (i > 0 && i % columnsNum == 0) {
+                        offsetIncreaseOffset -= 125;
+                    }
+
+                    dropDownAnimation.setStartOffset(i * 50 + offsetIncreaseOffset);
+                    AlphaAnimation alphaAnimation = new AlphaAnimation(1, 0);
+                    dropDownAnimation.addAnimation(alphaAnimation);
+                    ScaleAnimation scaleAnimation = new ScaleAnimation(
+                            1f, 0f,
+                            1f, 0f,
+                            Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                    dropDownAnimation.addAnimation(scaleAnimation);
+                    dropDownAnimation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            galleryItemView.setVisibility(View.INVISIBLE);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                    galleryItemView.startAnimation(dropDownAnimation);
+                }
+            }
+           /*     }
+            });*/
+            animationLength = gridView.getChildCount() * 100 + 50;
+            Log.d("Explorer animation", "CreateAnimator: exit");
+
+        } else if(nextAnim == R.animator.picker_fragment_explorer_out){
+            animatorId = R.animator.picker_activity_explorer_enter;
+
+
+        }else if(nextAnim == R.animator.picker_fragment_explorer_return){
+            animatorId = R.animator.picker_activity_explorer_enter;
+            gridView.setAlpha(0);
+            gridView.post(new Runnable() {
+                @Override
+                public void run() {
+                    gridView.setAlpha(1);
+                    int offsetIncreaseOffset = 150;
+                    for (int i = 0; i < gridView.getChildCount(); i++) {
+                        View galleryItemView = gridView.getChildAt(i);
+                        //if (items.get(i) instanceof HeaderItem)
+                        {
+                            // todo animate headers
+                            /*
+                                offsetIncreaseOffset += 150;
+                                slideInAnimation.setStartOffset(i * 50 + offsetIncreaseOffset);
+                                offsetIncreaseOffset += 200;
+                            } else
+                            */
+                        }
+                        //else
+                        {
+
+                            AnimationSet dropDownAnimation = new AnimationSet(true);
+                            dropDownAnimation.setInterpolator(new MaterialInterpolator());
+                            dropDownAnimation.setDuration(180);
+
+                            if (i > 0 && i % columnsNum == 0) {
+                                offsetIncreaseOffset -= 125;
+                            }
+
+                            dropDownAnimation.setStartOffset(i * 50 + offsetIncreaseOffset);
+                            AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
+                            dropDownAnimation.addAnimation(alphaAnimation);
+                            ScaleAnimation scaleAnimation = new ScaleAnimation(
+                                    0f, 1f,
+                                    0f, 1f,
+                                    Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                            dropDownAnimation.addAnimation(scaleAnimation);
+                            galleryItemView.startAnimation(dropDownAnimation);
+                        }
+                    }
+                }
+            });
+            animationLength = gridView.getChildCount() * 100 + 50;
+            Log.d("Explorer animation", "CreateAnimator: return");
+        }else{
+            return null;
+        }
+
+
+        AnimatorSet animator = (AnimatorSet) AnimatorInflater.loadAnimator(pickerActivity,
+                animatorId);
+
+        animator.setDuration(animationLength);
+
+        return animator;
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
@@ -198,12 +382,25 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
     }
 
     public static Fragment getInstance(String folderPath) {
+        Bundle bundle = new Bundle();
 
         PicturePickerFragment fragment = new PicturePickerFragment();
-        Bundle bundle = new Bundle();
         fragment.setArguments(bundle);
 
-        
+
+
+        return fragment;
+    }
+
+    public static Fragment getInstance(String path, String title) {
+
+        Bundle bundle = new Bundle();
+        bundle.putString(ARG_PATH_ID, path);
+        bundle.putString("path_name", title);
+        PicturePickerFragment fragment = new PicturePickerFragment();
+        fragment.setArguments(bundle);
+
+
 
         return fragment;
     }

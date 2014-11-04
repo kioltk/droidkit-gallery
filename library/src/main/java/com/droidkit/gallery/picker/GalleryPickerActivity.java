@@ -117,12 +117,8 @@ public class GalleryPickerActivity extends SuperPickerActivity {
 
         if (item.isDirectory()) {
             String path = item.getPath();
-            Bundle bundle = new Bundle();
-            bundle.putString("path", path);
-            bundle.putString("path_name", item.getTitle());
 
-            Fragment fragment = new PicturePickerFragment();
-            fragment.setArguments(bundle);
+            Fragment fragment = PicturePickerFragment.getInstance(item.getPath(),item.getTitle());
             getFragmentManager().beginTransaction()
                     // todo animate out
                     .setCustomAnimations(R.animator.picker_fragment_explorer_enter, R.animator.picker_fragment_explorer_out,

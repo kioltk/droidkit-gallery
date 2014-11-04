@@ -64,7 +64,7 @@ public class PictureViewerItemFragment extends Fragment {
                 holder.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        pickerActivity.toggleSystemUi();
+                        // pickerActivity.toggleSystemUi();
                     }
                 });
             }
