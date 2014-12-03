@@ -1,4 +1,4 @@
-package com.droidkit.gallery.items;
+package com.droidkit.gallery.holders;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -76,6 +76,7 @@ public class ExploreItemViewHolder {
 
     public void setImage(String uri){
         imageView.setSrc(null);
+        imageView.clear();
         imageView.requestPhoto(uri);
     }
 

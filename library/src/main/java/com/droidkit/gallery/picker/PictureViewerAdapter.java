@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v13.app.FragmentStatePagerAdapter;
 
 import com.droidkit.gallery.items.ExplorerItem;
+import com.droidkit.gallery.items.PictureItem;
 
 import java.util.ArrayList;
 
@@ -12,10 +13,10 @@ import java.util.ArrayList;
  * Created by kiolt_000 on 24/09/2014.
  */
 public class PictureViewerAdapter extends FragmentStatePagerAdapter {
-    private final ArrayList<ExplorerItem> items;
+    private final ArrayList<PictureItem> items;
     private SuperPickerActivity pickerActivity;
 
-    public PictureViewerAdapter(SuperPickerActivity pickerActivity, ArrayList<ExplorerItem> items) {
+    public PictureViewerAdapter(SuperPickerActivity pickerActivity, ArrayList<PictureItem> items) {
         super(pickerActivity.getFragmentManager());
         this.pickerActivity = pickerActivity;
         this.items = items;
@@ -36,7 +37,7 @@ public class PictureViewerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int i) {
         Fragment fragment = new PictureViewerItemFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("pathID", items.get(i).getPath());
+        bundle.putString("pathID", items.get(i).getFull());
         fragment.setArguments(bundle);
         return fragment;
     }

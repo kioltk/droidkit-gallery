@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 
 import com.droidkit.gallery.R;
-import com.droidkit.gallery.items.ExploreItemViewHolder;
+import com.droidkit.gallery.holders.ExploreItemViewHolder;
 import com.droidkit.gallery.items.ExplorerItem;
 
 import java.io.File;

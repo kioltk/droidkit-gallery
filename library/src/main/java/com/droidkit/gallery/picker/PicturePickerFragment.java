@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 
 import com.droidkit.gallery.R;
-import com.droidkit.gallery.items.ExploreItemViewHolder;
+import com.droidkit.gallery.holders.ExploreItemViewHolder;
 import com.droidkit.gallery.items.ExplorerItem;
 import com.droidkit.gallery.items.PictureFolderItem;
 import com.droidkit.gallery.items.PictureItem;
@@ -33,9 +33,6 @@ import com.droidkit.gallery.util.MaterialInterpolator;
 import java.io.File;
 import java.util.ArrayList;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class PicturePickerFragment extends Fragment implements AdapterView.OnItemClickListener, SelectionListener {
 
     public static final String ARG_PATH_ID = "pathID";
@@ -53,47 +50,6 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
     }
 
-    public void loadDirectories() {
-
-        long startTime = System.currentTimeMillis();
-        final String[] columns =
-                {
-                        MediaStore.Images.Media.DATA,
-                        MediaStore.Images.Media.BUCKET_ID,
-                        MediaStore.Images.Media.BUCKET_DISPLAY_NAME
-                };
-        final String orderBy = MediaStore.Images.Media.DEFAULT_SORT_ORDER +", " + MediaStore.Images.Media.DATE_MODIFIED + " DESC";
-
-        Cursor imagecursor = getActivity().getContentResolver().query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns,
-                null, null, orderBy);
-        if (imagecursor != null) {
-            int imgUriColumnIndex = imagecursor.getColumnIndex(MediaStore.Images.Media.DATA);
-            int bucketIdColumnIndex = imagecursor.getColumnIndex(MediaStore.Images.Media.BUCKET_ID);
-            int bucketNameColumnIndex = imagecursor.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
-            int insertedImagesCounter = 0;
-            int lastBucketId = -1;
-            PictureFolderItem folder = null;
-            if (imagecursor.moveToFirst())
-                do {
-                    int bucketId = imagecursor.getInt(bucketIdColumnIndex);
-
-                    String bucketName = imagecursor.getString(bucketNameColumnIndex);
-                    if (bucketId != lastBucketId) {
-
-                        folder = new PictureFolderItem(bucketId, bucketName);
-                        items.add(folder);
-                    }
-                    String imgUri = imagecursor.getString(imgUriColumnIndex);
-                    folder.putImage(imgUri);
-
-
-                    lastBucketId = bucketId;
-                } while (imagecursor.moveToNext());
-            imagecursor.close();
-        }
-        Log.w("Pictures loader", "Loaded " + items.size() + " directories in " + (System.currentTimeMillis() - startTime));
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -135,23 +91,88 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
         pickerActivity.getActionBar().setTitle(pathName);
         return rootView;
     }
+    public void loadDirectories() {
+
+        long startTime = System.currentTimeMillis();
+        final String[] columns =
+                {
+                        MediaStore.Images.Media._ID,
+                        MediaStore.Images.Media.DATA,
+                        MediaStore.Images.Media.BUCKET_ID,
+                        MediaStore.Images.Media.BUCKET_DISPLAY_NAME
+                };
+        final String orderBy = MediaStore.Images.Media.DEFAULT_SORT_ORDER + ", " + MediaStore.Images.Media.DATE_MODIFIED + " DESC";
+
+        Cursor imageCursor = getActivity().getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns,
+                null, null, orderBy);
+        if (imageCursor != null) {
+            int imgIdColumnIndex = imageCursor.getColumnIndex(MediaStore.Images.Media._ID);
+            int imgUriColumnIndex = imageCursor.getColumnIndex(MediaStore.Images.Media.DATA);
+            int bucketIdColumnIndex = imageCursor.getColumnIndex(MediaStore.Images.Media.BUCKET_ID);
+            int bucketNameColumnIndex = imageCursor.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+            int insertedImagesCounter = 0;
+            int lastBucketId = -1;
+            PictureFolderItem folder = null;
+            if (imageCursor.moveToFirst())
+                do {
+                    int bucketId = imageCursor.getInt(bucketIdColumnIndex);
+
+                    String bucketName = imageCursor.getString(bucketNameColumnIndex);
+                    if (bucketId != lastBucketId) {
+
+                        folder = new PictureFolderItem(bucketId, bucketName);
+                        items.add(folder);
+                    }
+                    String imgUri = imageCursor.getString(imgUriColumnIndex);
+                    long imageId = imageCursor.getLong(imgIdColumnIndex);
+                    Cursor thumbCursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
+                            pickerActivity.getContentResolver(), imageId,
+                            MediaStore.Images.Thumbnails.MINI_KIND,
+                            new String[]{ MediaStore.Images.Thumbnails.DATA });
+                    int thumbUriIndex = thumbCursor.getColumnIndex(MediaStore.Images.Thumbnails.DATA);
+                    if(thumbCursor.moveToFirst()) {
+                        imgUri = thumbCursor.getString(thumbUriIndex);
+                    }
+                    thumbCursor.close();
+                    folder.putImage(imgUri);
+
+
+                    lastBucketId = bucketId;
+                } while (imageCursor.moveToNext());
+            imageCursor.close();
+        }
+        Log.w("Pictures loader", "Loaded " + items.size() + " directories in " + (System.currentTimeMillis() - startTime));
+    }
 
     protected void loadDirectory() {
         long startTime = System.currentTimeMillis();
         Log.w("Pictures loader", "Loading directory " + pathID);
-        final String[] columns = {MediaStore.Images.Media.DATA};
+        final String[] columns = { MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA };
         final String orderBy = MediaStore.Images.Media.DATE_MODIFIED + " DESC";
 
         Cursor imageCursor = getActivity().getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns,
                 MediaStore.Images.Media.BUCKET_ID + " = " + pathID, null, orderBy);
-
         if (imageCursor != null) {
             int imgUriColumnIndex = imageCursor.getColumnIndex(MediaStore.Images.Media.DATA);
+            int imgIdColumnIndex = imageCursor.getColumnIndex(MediaStore.Images.Media._ID);
             if (imageCursor.moveToFirst())
                 do {
-                    String imageUri = imageCursor.getString(imgUriColumnIndex);
-                    items.add(new PictureItem(new File(imageUri), pickerActivity.isSelected(imageUri)));
+                    String imageUri =  imageCursor.getString(imgUriColumnIndex);
+                    long imageId = imageCursor.getLong(imgIdColumnIndex);
+                    Cursor thumbCursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
+                            pickerActivity.getContentResolver(), imageId,
+                            MediaStore.Images.Thumbnails.MINI_KIND,
+                            new String[]{ MediaStore.Images.Thumbnails.DATA });
+                    int thumbUriIndex = thumbCursor.getColumnIndex(MediaStore.Images.Thumbnails.DATA);
+                    String thumb = null;
+                    if(thumbCursor.moveToFirst()) {
+                        thumb = thumbCursor.getString(thumbUriIndex);
+                    }
+                    thumbCursor.close();
+
+                    items.add(new PictureItem(new File(imageUri), pickerActivity.isSelected(imageUri), thumb==null? null: new File(thumb)));
                 } while (imageCursor.moveToNext());
             imageCursor.close();
         }
@@ -281,8 +302,7 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
         if (item.isDirectory())
             pickerActivity.onItemClick(parent, itemView, position, id);
         else
-            pickerActivity.openFull(pathID, item.getFile())
-                    ;
+            pickerActivity.openFull(pathID, item.getFile());
     }
 
     @Override
@@ -298,10 +318,8 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
                     ExploreItemViewHolder holder = (ExploreItemViewHolder) gridView.getChildAt(i - firstVisible).getTag();
                     holder.setSelected(pickerActivity.getSelectedIndex(tempItem));
                 }
-
             }
         }
-
     }
 
     public static Fragment getInstance(String folderPath) {

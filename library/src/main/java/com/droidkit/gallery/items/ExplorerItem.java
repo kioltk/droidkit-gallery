@@ -1,12 +1,9 @@
 package com.droidkit.gallery.items;
 
 import android.content.Context;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 
-import com.droidkit.gallery.R;
+import com.droidkit.gallery.holders.ExploreItemViewHolder;
 
 import java.io.File;
 
@@ -51,13 +48,10 @@ public class ExplorerItem {
         return file.getName();
     }
 
-    public String getSubtitle(Context context){
+    public String getSubtitle(Context context) {
         return null;
     }
 
-    public int getImage() {
-        return imageId;
-    }
 
     public String getPath() {
         return file.getAbsolutePath();
@@ -79,7 +73,6 @@ public class ExplorerItem {
         return enabled;
     }
 
-
     public boolean isSelected() {
         return selected;
     }
@@ -87,16 +80,6 @@ public class ExplorerItem {
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
-
-    @Deprecated
-    public void bindImage(View itemView) {
-
-    }
-    @Deprecated
-    public void bindData(View itemView){
-
-    }
-
 
     public Long getLastModified() {
         return file.lastModified();
@@ -108,6 +91,4 @@ public class ExplorerItem {
         holder.setSelected(selected);
         //holder.enableDivider();
     }
-
-
 }

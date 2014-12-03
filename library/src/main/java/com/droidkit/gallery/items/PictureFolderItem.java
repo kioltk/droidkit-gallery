@@ -1,22 +1,17 @@
 package com.droidkit.gallery.items;
 
 import android.content.Context;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.droidkit.gallery.R;
-
-import java.io.File;
+import com.droidkit.gallery.holders.ExploreItemViewHolder;
 
 
 /**
- * Created by kiolt_000 on 16/09/2014.
+ * Created by Jesus Christ. Amen.
  */
-public class PictureFolderItem extends FolderItem {
+public class PictureFolderItem extends ContentItem  {
     private final String bucketName;
     private final int bucketId;
-    String albumImage = null;
+    private String albumImage = null;
     private int imgCounter = 0;
 
     public PictureFolderItem(int bucketId, String bucketName) {
@@ -40,29 +35,34 @@ public class PictureFolderItem extends FolderItem {
         return ""+ bucketId;
     }
 
-    @Override
-    public void bindData(View itemView) {
-        super.bindData(itemView);
 
-        TextView subTitleView = (TextView) itemView.findViewById(R.id.subtitle);
-
-        subTitleView.setVisibility(View.VISIBLE);
-
-
-    }
 
     @Override
     public void bindData(ExploreItemViewHolder holder) {
         holder.setTitle(getTitle());
         holder.setSubtitle(getSubtitle(holder.getContext()));
-        holder.setImage(""+ albumImage);
+        holder.setImage("" + albumImage);
     }
 
-
+    @Override
+    public boolean isDirectory() {
+        return true;
+    }
 
     public void putImage(String imgUri) {
         if(albumImage==null)
             albumImage=imgUri;
         imgCounter++;
     }
+
+    @Override
+    public String getImage() {
+        return albumImage;
+    }
+
+    @Override
+    public String getThumb(){
+        return albumImage;
+    }
+
 }

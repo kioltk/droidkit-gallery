@@ -1,24 +1,25 @@
 package com.droidkit.gallery.items;
 
 import android.content.Context;
-import android.view.View;
-import android.widget.ImageView;
 
 import com.droidkit.gallery.R;
+import com.droidkit.gallery.holders.ExploreItemViewHolder;
+import com.droidkit.gallery.holders.PictureHolder;
+import com.droidkit.gallery.util.TimeHelper;
 
 import java.io.File;
 
 /**
- * Created by kiolt_000 on 15/09/2014.
+ * Created by Jesus Christ. Amen.
  */
-public class PictureItem extends FileItem {
+public class PictureItem extends ContentItem {
 
-    public PictureItem(File file, boolean selected) {
+    private File thumb = null;
+
+
+    public PictureItem(File file, boolean selected, File thumb) {
         super(file, selected);
-    }
-
-    public PictureItem(File file, boolean selected, String fileType) {
-        super(file, selected, fileType);
+        this.thumb = thumb;
     }
 
     @Override
@@ -28,36 +29,50 @@ public class PictureItem extends FileItem {
 
     @Override
     public void bindData(ExploreItemViewHolder holder) {
-        holder.setImage(""+ getPath());
+        holder.setImage("" + getThumb());
         if (isVideo()) {
             ((PictureHolder) holder).setVideo();
-        }else{
+        } else {
             ((PictureHolder) holder).disableVideo();
         }
     }
 
     @Override
-    public void bindData(View itemView) {
-        super.bindData(itemView);
-        View stroke = itemView.findViewById(R.id.selected_stroke);
-        if (stroke != null) {
-            stroke.setSelected(isSelected());
-        }
-        if(isVideo()){
-            View videoHolder = itemView.findViewById(R.id.video_holder);
-            if(videoHolder!=null){
-                videoHolder.setVisibility(View.VISIBLE);
-            }
-        }
-    }
-
-    @Override
     public String getSubtitle(Context context) {
-        return null;
+        String convertedSize = null;
+        long size = (int) file.length();
+        if (size > 1024 * 1024 * 1024) {
+            convertedSize = (size / (1024 * 1024 * 1024)) + "" + ((size % (1024 * 1024 * 1024)) / (100 * 1024 * 1024)) + " " + context.getString(R.string.picker_gbytes);
+        }
+        if (size > 1024 * 1024) {
+            convertedSize = (size / (1024 * 1024)) + "" + ((size % (1024 * 1024)) / (100 * 1024)) + " " + context.getString(R.string.picker_mbytes);
+        }
+        if (convertedSize == null) {
+            if (size / 1024 == 0) {
+                convertedSize = context.getString(R.string.picker_bytes, size);
+            } else
+                convertedSize = (size / (1024)) + " " + context.getString(R.string.picker_kbytes);
+        }
+
+        long date = file.lastModified();
+        String subtitle = convertedSize;
+        if (date != 0) {
+            subtitle += ", " + TimeHelper.getConvertedTime(date, context);
+        }
+        return subtitle;
     }
 
 
     public boolean isVideo() {
         return false;
+    }
+
+    public String getThumb() {
+        if(thumb==null)
+            return file.getAbsolutePath();
+        return thumb.getAbsolutePath();
+    }
+    public String getFull() {
+        return file.getAbsolutePath();
     }
 }

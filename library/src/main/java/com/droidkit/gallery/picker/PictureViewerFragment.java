@@ -18,6 +18,7 @@ import android.view.animation.TranslateAnimation;
 
 import com.droidkit.gallery.R;
 import com.droidkit.gallery.items.ExplorerItem;
+import com.droidkit.gallery.items.PictureItem;
 import com.droidkit.gallery.util.MaterialInterpolator;
 
 import java.io.File;
@@ -51,8 +52,8 @@ public class PictureViewerFragment extends PicturePickerFragment {
 
             }
         });
-
-        items = new ArrayList<ExplorerItem>();
+        this.items = new ArrayList<ExplorerItem>();
+        ArrayList<PictureItem> items = new ArrayList<PictureItem>();
         //todo: animate it here
         // todo: actors
 
@@ -62,6 +63,11 @@ public class PictureViewerFragment extends PicturePickerFragment {
         pathID = bundle.getString("pathID");
         String selectedItem = bundle.getString("selectedItem");
         loadDirectory();
+        for (ExplorerItem item : this.items) {
+            if(item instanceof PictureItem){
+                items.add((PictureItem) item);
+            }
+        }
         adapter = new PictureViewerAdapter(pickerActivity, items);
         pager.setAdapter(adapter);
 

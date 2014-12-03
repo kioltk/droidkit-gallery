@@ -8,11 +8,12 @@ import android.widget.BaseAdapter;
 
 
 import com.droidkit.gallery.R;
-import com.droidkit.gallery.items.ExploreItemViewHolder;
+import com.droidkit.gallery.holders.ExploreItemViewHolder;
 import com.droidkit.gallery.items.ExplorerItem;
-import com.droidkit.gallery.items.PictureFolderHolder;
+import com.droidkit.gallery.holders.PictureFolderHolder;
 import com.droidkit.gallery.items.PictureFolderItem;
-import com.droidkit.gallery.items.PictureHolder;
+import com.droidkit.gallery.holders.PictureHolder;
+import com.droidkit.gallery.items.PictureItem;
 import com.droidkit.gallery.util.Timer;
 
 import java.util.ArrayList;
@@ -70,10 +71,10 @@ public class PictureAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         Timer.start();
         final ExplorerItem item = getItem(position);
-        final View itemView;
+        View itemView = null;
 
 
-        ExploreItemViewHolder holder;
+        ExploreItemViewHolder holder = null;
         if (convertView != null) {
             itemView = convertView;
             holder = (ExploreItemViewHolder) itemView.getTag();
@@ -82,22 +83,26 @@ public class PictureAdapter extends BaseAdapter {
                 itemView = View.inflate(pickerActivity, R.layout.picker_item_picture_folder, null);
                 holder = new PictureFolderHolder(itemView, itemSize);
             } else {
-                itemView = View.inflate(pickerActivity, R.layout.picker_item_picture, null);
-                holder = (new PictureHolder(itemView, itemSize));
+                if(item instanceof PictureItem) {
+                    itemView = View.inflate(pickerActivity, R.layout.picker_item_picture, null);
+                    holder = (new PictureHolder(itemView, itemSize));
+                }
             }
         }
 
         itemView.setTag(holder);
+
         ViewGroup.LayoutParams params = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, itemSize);
         itemView.setLayoutParams(params);
 
         item.bindData(holder);
         holder.setSelected(pickerActivity.getSelectedIndex(item));
+        final View finalItemView = itemView;
         holder.setSelectListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(selectionListener!=null)
-                    selectionListener.selectItem(item, itemView);
+                    selectionListener.selectItem(item, finalItemView);
             }
         });
 

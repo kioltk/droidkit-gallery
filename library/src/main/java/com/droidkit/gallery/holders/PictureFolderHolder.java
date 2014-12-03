@@ -1,4 +1,4 @@
-package com.droidkit.gallery.items;
+package com.droidkit.gallery.holders;
 
 import android.view.View;
 
