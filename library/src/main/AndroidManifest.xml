@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <application
+        android:name="com.droidkit.AppContext"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:label="droidkit-gallery">

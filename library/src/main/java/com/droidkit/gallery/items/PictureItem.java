@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.droidkit.gallery.R;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 
@@ -29,7 +28,7 @@ public class PictureItem extends FileItem {
 
     @Override
     public void bindData(ExploreItemViewHolder holder) {
-        holder.setImage("file://"+ getPath());
+        holder.setImage(""+ getPath());
         if (isVideo()) {
             ((PictureHolder) holder).setVideo();
         }else{

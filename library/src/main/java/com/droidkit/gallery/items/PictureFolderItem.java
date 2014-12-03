@@ -6,8 +6,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.droidkit.gallery.R;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 
@@ -57,25 +55,10 @@ public class PictureFolderItem extends FolderItem {
     public void bindData(ExploreItemViewHolder holder) {
         holder.setTitle(getTitle());
         holder.setSubtitle(getSubtitle(holder.getContext()));
-        holder.setImage("file://"+ albumImage);
+        holder.setImage(""+ albumImage);
     }
 
-    @Override
-    public void bindImage(View itemView) {
 
-        final ImageView holder = (ImageView) itemView.findViewById(R.id.image);
-        if (holder != null) {
-
-            //
-            // todo actor image loading?
-            holder.setImageResource(R.drawable.loading);
-
-
-
-
-        }
-         // super.bindImage(itemView);
-    }
 
     public void putImage(String imgUri) {
         if(albumImage==null)

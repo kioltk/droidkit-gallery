@@ -60,7 +60,7 @@ public class ExplorerItem {
     }
 
     public String getPath() {
-        return file.getPath();
+        return file.getAbsolutePath();
     }
 
     public boolean isDirectory() {
@@ -90,35 +90,13 @@ public class ExplorerItem {
 
     @Deprecated
     public void bindImage(View itemView) {
-        ImageView holder = (ImageView) itemView.findViewById(R.id.image);
-        holder.setScaleType(ImageView.ScaleType.CENTER);
-        if(imageId!=0) {
-            itemView.findViewById(R.id.type).setVisibility(View.INVISIBLE);
-            holder.setVisibility(View.VISIBLE);
-            holder.setImageResource(imageId);
-        }else{
-            holder.setImageResource(R.drawable.picker_file);
-            TextView formatHolder = (TextView) itemView.findViewById(R.id.type);
-            if(formatHolder!=null) {
-                formatHolder.setVisibility(View.VISIBLE);
-                formatHolder.setText(fileType);
-            }
-        }
+
     }
     @Deprecated
     public void bindData(View itemView){
 
     }
-    public void bindImage(ExploreItemViewHolder holder){
 
-        if(imageId!=0) {
-            holder.setIcon(imageId);
-            holder.setType("");
-        }else{
-            holder.setIcon(R.drawable.picker_file);
-            holder.setType(fileType);
-        }
-    }
 
     public Long getLastModified() {
         return file.lastModified();
@@ -128,7 +106,7 @@ public class ExplorerItem {
         holder.setTitle(getTitle());
         holder.setSubtitle(getSubtitle(holder.getContext()));
         holder.setSelected(selected);
-        holder.enableDivider();
+        //holder.enableDivider();
     }
 
 

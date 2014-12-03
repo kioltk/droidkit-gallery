@@ -12,10 +12,7 @@ import android.widget.ImageView;
 
 import com.droidkit.gallery.R;
 import com.droidkit.gallery.photoview.PhotoViewAttacher;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.droidkit.images.loading.view.PhotoPreview;
 
 /**
  * Created by kiolt_000 on 24/09/2014.
@@ -34,14 +31,15 @@ public class PictureViewerItemFragment extends Fragment {
 
         path = getArguments().getString("pathID");
 
-        final ImageView holder = (ImageView) rootView.findViewById(R.id.image);
+        final PhotoPreview holder = (PhotoPreview) rootView.findViewById(R.id.preview);
 
         // Set the Drawable displayed
         // "file://"+pathID
         // todo actor image loading?
 //        Bitmap bitmap = BitmapFactory.decodeFile(pathID);
-        String uri = "file://" + path;
-        DisplayImageOptions options = new DisplayImageOptions.Builder()
+        String uri = "" + path;
+        holder.requestPhoto(uri);
+        /*DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .build();
@@ -64,7 +62,7 @@ public class PictureViewerItemFragment extends Fragment {
                 holder.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // pickerActivity.toggleSystemUi();
+                       // pickerActivity.toggleSystemUi();
                     }
                 });
             }
@@ -73,7 +71,7 @@ public class PictureViewerItemFragment extends Fragment {
             public void onLoadingCancelled(String imageUri, View view) {
 
             }
-        });
+        });*/
 
         final View selectedView = rootView.findViewById(R.id.selected);
         selectedView.setSelected(pickerActivity.isSelected(path));

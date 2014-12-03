@@ -18,10 +18,6 @@ import android.widget.Toast;
 import com.droidkit.gallery.R;
 import com.droidkit.gallery.items.ExploreItemViewHolder;
 import com.droidkit.gallery.items.ExplorerItem;
-import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
-import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -66,16 +62,7 @@ public abstract class SuperPickerActivity extends Activity implements AdapterVie
         });
 
 
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
-                .threadPriority(Thread.MAX_PRIORITY)
-                .memoryCache(new LruMemoryCache(2 * 1024 * 1024))
-                .memoryCacheSize(2 * 1024 * 1024)
-                .memoryCacheSizePercentage(40)
-                .diskCacheSize(20 * 1024 * 1024)
-                .diskCacheFileCount(20)
-                .diskCacheFileNameGenerator(new HashCodeFileNameGenerator())
-                .build();
-        ImageLoader.getInstance().init(config);
+
 
 
     }

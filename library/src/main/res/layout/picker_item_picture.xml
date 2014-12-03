@@ -12,10 +12,10 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <ImageView
+            <com.droidkit.images.loading.view.PhotoPreview
                 android:background="#444"
                 android:scaleType="centerCrop"
-                android:id="@+id/image"
+                android:id="@+id/preview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
             <ImageView

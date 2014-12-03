@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/image"
+    <com.droidkit.images.loading.view.PhotoPreview
+        android:id="@+id/preview"
         android:scaleType="centerInside"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
