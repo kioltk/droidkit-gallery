@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.app.Fragment;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -25,10 +26,12 @@ import android.widget.TextView;
 
 import com.droidkit.gallery.R;
 import com.droidkit.gallery.holders.ExploreItemViewHolder;
+import com.droidkit.gallery.items.ContentItem;
 import com.droidkit.gallery.items.ExplorerItem;
 import com.droidkit.gallery.items.PictureFolderItem;
 import com.droidkit.gallery.items.PictureItem;
 import com.droidkit.gallery.util.MaterialInterpolator;
+import com.droidkit.gallery.viewer.PictureViewerActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,7 +46,7 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
     protected String pathName = "Select pictures";
     private GridView gridView;
     private int columnsNum;
-    private long animationLengthMultiplier = 1;
+    private float animationLengthMultiplier = 1.5f;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,9 +102,11 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
                         MediaStore.Images.Media._ID,
                         MediaStore.Images.Media.DATA,
                         MediaStore.Images.Media.BUCKET_ID,
-                        MediaStore.Images.Media.BUCKET_DISPLAY_NAME
+                        MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+                        MediaStore.Images.Media.WIDTH,
+                        MediaStore.Images.Media.HEIGHT
                 };
-        final String orderBy = MediaStore.Images.Media.DEFAULT_SORT_ORDER + ", " + MediaStore.Images.Media.DATE_MODIFIED + " DESC";
+        final String orderBy = MediaStore.Images.Media.BUCKET_ID + ", " + MediaStore.Images.Media.DATE_MODIFIED + " DESC";
 
         Cursor imageCursor = getActivity().getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns,
@@ -109,6 +114,8 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
         if (imageCursor != null) {
             int imgIdColumnIndex = imageCursor.getColumnIndex(MediaStore.Images.Media._ID);
             int imgUriColumnIndex = imageCursor.getColumnIndex(MediaStore.Images.Media.DATA);
+            int imgWidthColumnIndex = imageCursor.getColumnIndex(MediaStore.Images.Media.WIDTH);
+            int imgHeightColumnIndex = imageCursor.getColumnIndex(MediaStore.Images.Media.HEIGHT);
             int bucketIdColumnIndex = imageCursor.getColumnIndex(MediaStore.Images.Media.BUCKET_ID);
             int bucketNameColumnIndex = imageCursor.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
             int insertedImagesCounter = 0;
@@ -126,16 +133,30 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
                     }
                     String imgUri = imageCursor.getString(imgUriColumnIndex);
                     long imageId = imageCursor.getLong(imgIdColumnIndex);
-                    Cursor thumbCursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
+                    int imageWidth =  imageCursor.getInt(imgWidthColumnIndex);
+                    int imageHeight =  imageCursor.getInt(imgHeightColumnIndex);
+                    /*Cursor thumbCursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
                             pickerActivity.getContentResolver(), imageId,
                             MediaStore.Images.Thumbnails.MINI_KIND,
-                            new String[]{ MediaStore.Images.Thumbnails.DATA });
+                            new String[]{
+                                    MediaStore.Images.Thumbnails.DATA,
+                                    MediaStore.Images.Thumbnails.WIDTH,
+                                    MediaStore.Images.Thumbnails.HEIGHT
+                            });
+
                     int thumbUriIndex = thumbCursor.getColumnIndex(MediaStore.Images.Thumbnails.DATA);
+                    int thumbWidthIndex = thumbCursor.getColumnIndex(MediaStore.Images.Thumbnails.WIDTH);
+                    int thumbHeightIndex = thumbCursor.getColumnIndex(MediaStore.Images.Thumbnails.HEIGHT);
                     if(thumbCursor.moveToFirst()) {
-                        imgUri = thumbCursor.getString(thumbUriIndex);
+                        String thumb = thumbCursor.getString(thumbUriIndex);
+                        int thumbWidth = thumbCursor.getInt(thumbWidthIndex);
+                        int thumbHeight = thumbCursor.getInt(thumbHeightIndex);
+                        //folder.setThumb(thumb, thumbWidth, thumbHeight);
                     }
-                    thumbCursor.close();
+                    thumbCursor.close();*/
+
                     folder.putImage(imgUri);
+                    folder.setThumb(imgUri, imageWidth, imageHeight);
 
 
                     lastBucketId = bucketId;
@@ -148,37 +169,55 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
     protected void loadDirectory() {
         long startTime = System.currentTimeMillis();
         Log.w("Pictures loader", "Loading directory " + pathID);
-        final String[] columns = { MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA };
+        final String[] columns = {
+                MediaStore.Images.Media._ID,
+                MediaStore.Images.Media.DATA,
+                MediaStore.Images.Media.WIDTH,
+                MediaStore.Images.Media.HEIGHT
+        };
         final String orderBy = MediaStore.Images.Media.DATE_MODIFIED + " DESC";
 
         Cursor imageCursor = getActivity().getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns,
                 MediaStore.Images.Media.BUCKET_ID + " = " + pathID, null, orderBy);
         if (imageCursor != null) {
-            int imgUriColumnIndex = imageCursor.getColumnIndex(MediaStore.Images.Media.DATA);
             int imgIdColumnIndex = imageCursor.getColumnIndex(MediaStore.Images.Media._ID);
+            int imgUriColumnIndex = imageCursor.getColumnIndex(MediaStore.Images.Media.DATA);
+            int imgWidthColumnIndex = imageCursor.getColumnIndex(MediaStore.Images.Media.WIDTH);
+            int imgHeightColumnIndex = imageCursor.getColumnIndex(MediaStore.Images.Media.HEIGHT);
             if (imageCursor.moveToFirst())
                 do {
                     String imageUri =  imageCursor.getString(imgUriColumnIndex);
+                    int imageWidth =  imageCursor.getInt(imgWidthColumnIndex);
+                    int imageHeight =  imageCursor.getInt(imgHeightColumnIndex);
                     long imageId = imageCursor.getLong(imgIdColumnIndex);
-                    Cursor thumbCursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
+                    /*Cursor thumbCursor = MediaStore.Images.Thumbnails.queryMiniThumbnail(
                             pickerActivity.getContentResolver(), imageId,
                             MediaStore.Images.Thumbnails.MINI_KIND,
-                            new String[]{ MediaStore.Images.Thumbnails.DATA });
-                    int thumbUriIndex = thumbCursor.getColumnIndex(MediaStore.Images.Thumbnails.DATA);
-                    String thumb = null;
+                            new String[]{
+                                    MediaStore.Images.Thumbnails.DATA,
+                                    MediaStore.Images.Thumbnails.WIDTH,
+                                    MediaStore.Images.Thumbnails.HEIGHT
+                            }
+                    );*/
+                    PictureItem pic = new PictureItem(new File(imageUri), pickerActivity.isSelected(imageUri));
+                    pic.setImageSize(imageWidth, imageHeight);
+                    /*int thumbUriIndex = thumbCursor.getColumnIndex(MediaStore.Images.Thumbnails.DATA);
+                    int thumbWidthIndex = thumbCursor.getColumnIndex(MediaStore.Images.Thumbnails.WIDTH);
+                    int thumbHeightIndex = thumbCursor.getColumnIndex(MediaStore.Images.Thumbnails.HEIGHT);
                     if(thumbCursor.moveToFirst()) {
-                        thumb = thumbCursor.getString(thumbUriIndex);
+                        String thumb = thumbCursor.getString(thumbUriIndex);
+                        int thumbWidth = thumbCursor.getInt(thumbWidthIndex);
+                        int thumbHeight = thumbCursor.getInt(thumbHeightIndex);
+                        //pic.setThumb(thumb, thumbWidth, thumbHeight);
                     }
-                    thumbCursor.close();
-
-                    items.add(new PictureItem(new File(imageUri), pickerActivity.isSelected(imageUri), thumb==null? null: new File(thumb)));
+                    thumbCursor.close();*/
+                    items.add(pic);
                 } while (imageCursor.moveToNext());
             imageCursor.close();
         }
         Log.w("Pictures loader", "Loaded " + items.size() + " items in directory in " + (System.currentTimeMillis() - startTime));
     }
-
 
     @Override
     public Animator onCreateAnimator(int transit, boolean enter, int nextAnim) {
@@ -202,13 +241,13 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
 
                             AnimationSet dropDownAnimation = new AnimationSet(true);
                             dropDownAnimation.setInterpolator(new MaterialInterpolator());
-                            dropDownAnimation.setDuration(180 * animationLengthMultiplier);
+                            dropDownAnimation.setDuration((long) (180 * animationLengthMultiplier));
 
                             if (i % columnsNum == 0) {
                                 offsetIncreaseOffset = i * defaultAnimationOffsetPerItem - 25;
                             }
 
-                            dropDownAnimation.setStartOffset((i * defaultAnimationOffsetPerItem - offsetIncreaseOffset) * animationLengthMultiplier);
+                            dropDownAnimation.setStartOffset((long) ((i * defaultAnimationOffsetPerItem - offsetIncreaseOffset) * animationLengthMultiplier));
                             AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
                             dropDownAnimation.addAnimation(alphaAnimation);
                             ScaleAnimation scaleAnimation = new ScaleAnimation(
@@ -224,6 +263,7 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
                 animationLength = gridView.getChildCount() * 100 + 50;
                 Log.d("Explorer animation", "CreateAnimator: enter");
             } else if (nextAnim == R.animator.picker_fragment_explorer_exit || nextAnim == R.animator.picker_fragment_explorer_out) {
+
                 animatorId = R.animator.picker_animation_fake;
 
                 for (int i = 0; i < gridView.getChildCount(); i++) {
@@ -232,13 +272,13 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
 
                         AnimationSet dropDownAnimation = new AnimationSet(true);
                         dropDownAnimation.setInterpolator(new MaterialInterpolator());
-                        dropDownAnimation.setDuration(180 * animationLengthMultiplier);
+                        dropDownAnimation.setDuration((long) (180 * animationLengthMultiplier));
 
                         if (i % columnsNum == 0) {
                             offsetIncreaseOffset = i * defaultAnimationOffsetPerItem - 25;
                         }
 
-                        dropDownAnimation.setStartOffset((i * defaultAnimationOffsetPerItem - offsetIncreaseOffset) * animationLengthMultiplier);
+                        dropDownAnimation.setStartOffset((long) ((i * defaultAnimationOffsetPerItem - offsetIncreaseOffset) * animationLengthMultiplier));
                         AlphaAnimation alphaAnimation = new AlphaAnimation(1, 0);
                         dropDownAnimation.addAnimation(alphaAnimation);
                         ScaleAnimation scaleAnimation = new ScaleAnimation(
@@ -278,7 +318,7 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
         AnimatorSet animator = (AnimatorSet) AnimatorInflater.loadAnimator(pickerActivity,
                 animatorId);
 
-        animator.setDuration(animationLength * animationLengthMultiplier);
+        animator.setDuration((long) (animationLength * animationLengthMultiplier));
 
         return animator;
     }
@@ -298,12 +338,19 @@ public class PicturePickerFragment extends Fragment implements AdapterView.OnIte
 
     @Override
     public void onItemClick(AdapterView<?> parent, View itemView, int position, long id) {
-        ExplorerItem item = (ExplorerItem) parent.getItemAtPosition(position);
-        if (item.isDirectory())
-            pickerActivity.onItemClick(parent, itemView, position, id);
-        else
-            pickerActivity.openFull(pathID, item.getFile());
+        Object explorerItem = parent.getItemAtPosition(position);
+        if(explorerItem instanceof ContentItem) {
+            ContentItem item = (ContentItem) explorerItem;
+
+            if (item.isDirectory()) {
+                pickerActivity.onItemClick(parent, itemView, position, id);
+            } else {
+                // pickerActivity.openFull(pathID, item.getFile());
+                pickerActivity.startActivity(PictureViewerActivity.openFull(pickerActivity, item));
+            }
+        }
     }
+
 
     @Override
     public void selectItem(ExplorerItem item, View itemView) {

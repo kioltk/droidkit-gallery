@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.droidkit.gallery.holders.ExploreItemViewHolder;
 
+import java.io.File;
+
 
 /**
  * Created by Jesus Christ. Amen.
@@ -41,7 +43,7 @@ public class PictureFolderItem extends ContentItem  {
     public void bindData(ExploreItemViewHolder holder) {
         holder.setTitle(getTitle());
         holder.setSubtitle(getSubtitle(holder.getContext()));
-        holder.setImage("" + albumImage);
+        holder.setImage(getImage(), thumbWidth, thumbHeight);
     }
 
     @Override
@@ -56,13 +58,20 @@ public class PictureFolderItem extends ContentItem  {
     }
 
     @Override
+    public void setThumb(String thumb, int thumbWidth, int thumbHeight) {
+        if(thumb!=null)
+            super.setThumb(thumb, thumbWidth, thumbHeight);
+    }
+
+    @Override
     public String getImage() {
-        return albumImage;
+
+        return getThumb();
     }
 
     @Override
     public String getThumb(){
-        return albumImage;
+        return super.getThumb();
     }
 
 }

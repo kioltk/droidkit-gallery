@@ -12,12 +12,16 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <com.droidkit.images.loading.view.PhotoPreview
+            <LinearLayout
+                android:gravity="center"
                 android:background="#444"
-                android:scaleType="centerCrop"
-                android:id="@+id/preview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent">
+                <com.droidkit.images.loading.view.PhotoPreview
+                    android:id="@+id/preview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
             <ImageView
                 android:visibility="gone"
                 android:id="@+id/video_holder"

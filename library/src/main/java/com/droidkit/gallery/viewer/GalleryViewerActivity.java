@@ -1,26 +1,10 @@
 package com.droidkit.gallery.viewer;
 
-import com.droidkit.gallery.R;
-import com.droidkit.gallery.items.PictureItem;
 import com.droidkit.gallery.picker.GalleryPickerActivity;
 import com.droidkit.gallery.picker.PicturePickerFragment;
-import com.droidkit.gallery.util.SystemUiHider;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.Fragment;
-import android.database.Cursor;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.MediaStore;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-
-import java.io.File;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 
 
 /**

@@ -19,4 +19,25 @@
     <!-- Backward-compatible version of ?android:attr/buttonBarButtonStyle -->
     <style name="ButtonBarButton" />
 
+    <style name="PickerTheme.Fullscreen" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@color/overlay_background</item>
+
+
+        <!--<item name="textColorPrimary">#c0ffffff</item>-->
+        <item name="colorControlNormal">#c0ffffff</item>
+        <item name="actionMenuTextColor">#444</item>
+
+        <item name="android:textColorPrimary">#c0ffffff</item>
+        <item name="android:colorControlNormal">#c0ffffff</item>
+        <item name="android:actionMenuTextColor">#444</item>
+        <item name="android:textColorSecondary">#444</item>
+        <item name="android:textColorSecondaryInverse">#444</item>
+    </style>
+
+
+
 </resources>

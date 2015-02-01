@@ -2,6 +2,7 @@ package com.droidkit.gallery.sample;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -52,7 +53,7 @@ public class MyActivity extends Activity {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+                                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_my, container, false);
 
             rootView.findViewById(R.id.picker).setOnClickListener(new View.OnClickListener() {
@@ -62,10 +63,17 @@ public class MyActivity extends Activity {
                 }
             });
 
+            rootView.findViewById(R.id.gallery).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(Intents.getGalleryViewerActivity(getActivity(), "699601103"));
+                }
+            });
+
             rootView.findViewById(R.id.viewer).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(Intents.getViewerActivity(getActivity(), "699601103"));
+                    startActivity(Intents.openPhoto(Uri.parse("/storage/emulated/0/Pictures/Screenshots/Screenshot_2015-01-29-14-49-42.png"), getActivity()));
                 }
             });
             return rootView;

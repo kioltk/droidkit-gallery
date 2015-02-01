@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item>
+        <shape android:shape="oval">
+            <size android:height="1dp"/>
+            <solid android:color="@color/picker_controller_background_default"/>
+        </shape>
+    </item>
+
+</layer-list>

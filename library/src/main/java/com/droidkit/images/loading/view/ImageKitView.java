@@ -13,6 +13,7 @@ import com.droidkit.images.loading.ImageLoader;
 import com.droidkit.images.loading.ImageLoaderProvider;
 import com.droidkit.images.loading.ImageReceiver;
 import com.droidkit.images.loading.ReceiverCallback;
+import com.droidkit.images.loading.tasks.RawFileTask;
 
 /**
  * Created by ex3ndr on 20.08.14.
@@ -38,6 +39,9 @@ public class ImageKitView extends ImageView implements ReceiverCallback {
     }
 
     private void init() {
+        if(isInEditMode()){
+            return;
+        }
         if (getContext().getApplicationContext() instanceof ImageLoaderProvider) {
             ImageLoader loader = ((ImageLoaderProvider) getContext().getApplicationContext()).getImageLoader();
             receiver = loader.createReceiver(this);
@@ -119,5 +123,9 @@ public class ImageKitView extends ImageView implements ReceiverCallback {
             setImageBitmap(null);
             isInternal = false;
         }
+    }
+
+    public void requestPhoto(String fileName) {
+        request(new RawFileTask(fileName));
     }
 }

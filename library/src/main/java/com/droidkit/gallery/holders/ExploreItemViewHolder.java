@@ -1,19 +1,13 @@
 package com.droidkit.gallery.holders;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.os.Build;
 import android.view.View;
 import android.widget.Checkable;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.droidkit.gallery.R;
-import com.droidkit.images.common.ImageLoadException;
 import com.droidkit.images.loading.view.PhotoPreview;
-import com.droidkit.images.ops.ImageLoading;
-
-import java.io.File;
 
 /**
  * Created by kiolt_000 on 09/10/2014.
@@ -74,11 +68,6 @@ public class ExploreItemViewHolder {
         //imageView.setImageResource(imageId);
     }
 
-    public void setImage(String uri){
-        imageView.setSrc(null);
-        imageView.clear();
-        imageView.requestPhoto(uri);
-    }
 
 
     public void setSelectListener(View.OnClickListener onClickListener) {
@@ -94,5 +83,19 @@ public class ExploreItemViewHolder {
             ((TextView) selectedView).setText("" + (selectedIndex > 0 ? selectedIndex : ""));
             selectedView.setSelected(selectedIndex > 0);
         }
+    }
+
+    public void setImage(String uri, int thumbWidth, int thumbHeight) {
+        imageView.setSrc(null);
+        imageView.clear();
+        imageView.requestPreview(uri, itemSize, itemSize);
+
+        int deltaSize = thumbHeight > thumbWidth ? thumbWidth : thumbHeight;
+
+        double scale = ((double)  itemSize/ (double) deltaSize);
+        int width = (int) (scale * thumbWidth);
+        int height = (int) (scale * thumbHeight);
+        imageView.setLayoutParams(new LinearLayout.LayoutParams(width, height));
+
     }
 }

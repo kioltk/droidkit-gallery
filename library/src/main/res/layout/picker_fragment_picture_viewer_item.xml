@@ -6,9 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.droidkit.images.loading.view.PhotoPreview
+    <com.droidkit.images.loading.view.ImageKitView
         android:id="@+id/preview"
-        android:scaleType="centerInside"
+        android:layout_centerInParent="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     <ImageView

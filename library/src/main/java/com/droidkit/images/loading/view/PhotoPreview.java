@@ -11,6 +11,7 @@ import android.graphics.Shader;
 import android.util.AttributeSet;
 
 import com.droidkit.Screen;
+import com.droidkit.images.loading.tasks.PreviewFileTask;
 import com.droidkit.images.loading.tasks.RawFileTask;
 
 /**
@@ -35,6 +36,10 @@ public class PhotoPreview extends ImageReceiverView {
         requestSwitch(new RawFileTask(fileName));
     }
 
+
+    public void requestPreview(String uri, int w, int h) {
+        requestSwitch(new PreviewFileTask(uri, w, h));
+    }
     /*public void requestVideo(String fileName) {
         requestSwitch(new VideoTask(fileName));
     }
@@ -73,4 +78,5 @@ public class PhotoPreview extends ImageReceiverView {
             canvas.drawRoundRect(new RectF(0, 0, getWidth(), getHeight()), Screen.dp(2), Screen.dp(2), p);
         }
     }
+
 }

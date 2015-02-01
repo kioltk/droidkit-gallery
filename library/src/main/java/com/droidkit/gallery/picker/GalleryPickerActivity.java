@@ -1,27 +1,20 @@
 package com.droidkit.gallery.picker;
 
-import android.annotation.TargetApi;
 import android.app.Fragment;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 
-
 import com.droidkit.gallery.R;
 import com.droidkit.gallery.items.ExplorerItem;
-import com.droidkit.gallery.util.SystemUiHider;
 
 import java.io.File;
 
 public class GalleryPickerActivity extends SuperPickerActivity {
 
 
-    private SystemUiHider mSystemUiHider;
-    private static final int HIDER_FLAGS = 0;//SystemUiHider.FLAG_FULLSCREEN;
     private boolean showing = true;
 
     @Override
@@ -31,7 +24,7 @@ public class GalleryPickerActivity extends SuperPickerActivity {
 
         View container = findViewById(R.id.container);
         final View controlsView = findViewById(R.id.controllers);
-
+/*
         mSystemUiHider = SystemUiHider.getInstance(this, container, HIDER_FLAGS);
         mSystemUiHider.setup();
         mSystemUiHider
@@ -74,7 +67,7 @@ public class GalleryPickerActivity extends SuperPickerActivity {
                             //delayedHide(3000);
                         }
                     }
-                });
+                });*/
     }
 
     @Override

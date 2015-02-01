@@ -14,12 +14,10 @@ import java.io.File;
  */
 public class PictureItem extends ContentItem {
 
-    private File thumb = null;
 
 
-    public PictureItem(File file, boolean selected, File thumb) {
+    public PictureItem(File file, boolean selected) {
         super(file, selected);
-        this.thumb = thumb;
     }
 
     @Override
@@ -29,7 +27,7 @@ public class PictureItem extends ContentItem {
 
     @Override
     public void bindData(ExploreItemViewHolder holder) {
-        holder.setImage("" + getThumb());
+        holder.setImage(getThumb(), getThumbWidth(), getThumbHeight());
         if (isVideo()) {
             ((PictureHolder) holder).setVideo();
         } else {
@@ -63,16 +61,11 @@ public class PictureItem extends ContentItem {
     }
 
 
+
     public boolean isVideo() {
         return false;
     }
 
-    public String getThumb() {
-        if(thumb==null)
-            return file.getAbsolutePath();
-        return thumb.getAbsolutePath();
-    }
-    public String getFull() {
-        return file.getAbsolutePath();
-    }
+
+
 }

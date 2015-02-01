@@ -13,6 +13,13 @@ import java.io.File;
 public class ContentItem extends ExplorerItem {
 
 
+    protected File thumb = null;
+    public int imageWidth;
+    public int imageHeight;
+    public int thumbWidth;
+    public int thumbHeight;
+    private int rotation;
+
     public ContentItem(String path) {
         super(path);
     }
@@ -38,10 +45,51 @@ public class ContentItem extends ExplorerItem {
 
 
     public String getImage() {
-        return null;
+        return getThumb();
     }
 
     public String getThumb() {
-        return null;
+        if(thumb!=null)
+            return thumb.getAbsolutePath();
+        return file.getAbsolutePath();
     }
+
+    public int getThumbWidth() {
+
+        if(thumbWidth==0) return imageWidth;
+        return thumbWidth;
+    }
+
+    public int getThumbHeight() {
+        if(thumbHeight==0) return imageHeight;
+        return thumbHeight;
+    }
+
+    public void setImageSize(int imageWidth, int imageHeight) {
+        this.imageWidth = imageWidth;
+        this.imageHeight = imageHeight;
+    }
+
+    public void setThumb(String thumb, int thumbWidth, int thumbHeight) {
+        this.thumb = new File(thumb);
+        this.thumbWidth = thumbWidth;
+        this.thumbHeight = thumbHeight;
+    }
+
+    public int getImageWidth() {
+        return imageWidth;
+    }
+
+    public int getImageHeight() {
+        return imageHeight;
+    }
+
+    public void setRotation(int rotation){
+        this.rotation = rotation;
+    }
+
+    public int getRotation(){
+        return this.rotation;
+    }
+
 }
